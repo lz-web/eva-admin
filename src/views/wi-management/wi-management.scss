@@ -1,0 +1,21 @@
+// @import "@/assets/scss/variables.scss";
+
+.wi-management-wrap {
+  // width: 100%;
+  .btn-wrap{
+    text-align: center;
+    padding: 40px 50px;
+    .el-button{
+      width:120px;
+      height: 40px;
+      font-size: 18px;
+    }
+  }
+}
+.el-table--enable-row-transition .el-table__body td{
+  border-color:  #e4e7ed ;
+}
+.el-table__body tr {
+  height: 28px !important;
+  line-height: 28px !important;
+}
