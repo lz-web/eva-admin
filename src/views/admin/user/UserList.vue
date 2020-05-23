@@ -33,7 +33,7 @@
       </el-select>
       <el-select
         class="search-item"
-        v-model="search_obj.user_class"
+        v-model="search_obj.user_industry"
         clearable
         placeholder="请选择行业类型"
       >
@@ -144,7 +144,7 @@ export default {
         user_name: '',
         user_phone: '',
         user_status: '',
-        user_class: '',
+        user_industry: '',
       },
       status_options: [{ // 状态
         label: '待审核', value: '待审核'
