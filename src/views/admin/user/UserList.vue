@@ -111,6 +111,7 @@ import Admin from '@/lin/models/admin'
 import LinTable from '@/components/base/table/lin-table'
 import UserInfo from './UserInfo'
 import UserPassword from './UserPassword'
+import { dateFilter } from './../../../assets/js/comm.fnc'
 
 export default {
   components: { LinTable, UserInfo, UserPassword },
@@ -171,11 +172,15 @@ export default {
       const currentPage = this.currentPage - 1
       try {
         this.loading = true
-        res = await Admin.getAdminUsers({ group_id: this.group_id, count: this.pageCount, page: currentPage,search_obj:this.search_obj }) // eslint-disable-line
+        res = await Admin.getAdminUsers({ group_id: this.group_id, count: this.pageCount, page: currentPage, search_obj: this.search_obj }) // eslint-disable-line
         this.loading = false
         // this.tableData = this.shuffleList(res.result.rows)
-        res.result.rows.forEach((item,index) => {
+        res.result.rows.forEach((item, index) => {
           item.index = index + 1
+          console.log(item.create_time)
+          let a = dateFilter(item.create_time, 'yyyy-MM-dd hh:mm')
+          // console.log(dateFilter(item.create_time, 'yyyy-MM-dd hh:mm'))
+          item.create_time = dateFilter(item.create_time, 'yyyy-MM-dd hh:mm')
         })
         this.tableData = res.result.rows
         this.total_nums = res.result.count
@@ -397,7 +402,7 @@ export default {
     await this.getAdminUsers()
     this.getAllGroups()
     this.tableColumn = [
-      { prop: 'index', label: '序号' },
+      { prop: 'index', label: '序号', width: '80' },
       { prop: 'user_name', label: '姓名' },
       { prop: 'user_company', label: '公司/单位名称' },
       { prop: 'user_class', label: '职位' },
