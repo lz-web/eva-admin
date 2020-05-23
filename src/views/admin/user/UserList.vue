@@ -174,6 +174,9 @@ export default {
         res = await Admin.getAdminUsers({ group_id: this.group_id, count: this.pageCount, page: currentPage,search_obj:this.search_obj }) // eslint-disable-line
         this.loading = false
         // this.tableData = this.shuffleList(res.result.rows)
+        res.result.rows.forEach((item,index) => {
+          item.index = index + 1
+        })
         this.tableData = res.result.rows
         this.total_nums = res.result.count
       } catch (e) {
@@ -394,7 +397,7 @@ export default {
     await this.getAdminUsers()
     this.getAllGroups()
     this.tableColumn = [
-      { prop: 'id', label: '序号' },
+      { prop: 'index', label: '序号' },
       { prop: 'user_name', label: '姓名' },
       { prop: 'user_company', label: '公司/单位名称' },
       { prop: 'user_class', label: '职位' },
