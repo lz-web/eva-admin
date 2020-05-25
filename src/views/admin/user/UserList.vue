@@ -152,6 +152,8 @@ export default {
       }, {
         label: '通过', value: '通过'
       }, {
+        label: '拒绝', value: '拒绝'
+      }, {
         label: '停用', value: '停用'
       }],
       class_options: [{ // 分类
