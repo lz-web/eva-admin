@@ -1,6 +1,7 @@
 import Utils from '@/lin/utils/util'
 import Admin from '@/lin/models/admin'
 import LinTable from '@/components/base/table/lin-table'
+import { dateFilter } from './../../../assets/js/comm.fnc'
 
 export default {
   components: {
@@ -29,11 +30,11 @@ export default {
           label: '自测得分'
         },
         {
-          prop: 'industry_score',
+          prop: 'eva_score.industry_score',
           label: '行业得分'
         },
         {
-          prop: 'download_count',
+          prop: 'download_count_f',
           label: '下载次数'
         },
         {
@@ -49,10 +50,18 @@ export default {
   },
   methods: {
     async handleDetail(val) {
+      this.$message({
+        type: 'error',
+        message: '开发中...'
+      })
       console.log('handleDetail')
     },
     async handleDownload(val) {
       console.log('handleDownload')
+      this.$message({
+        type: 'error',
+        message: '开发中...'
+      })
     },
     async getEvaRecord() {
       await Admin.getEvaRecord({
@@ -60,16 +69,19 @@ export default {
         page_no: this.currentPage
       }).then((res) => {
         if (res.code == 10000) {
-          this.tableData = res.result.rows;
-          this.total_nums = res.result.count;
+          res.result.data.forEach(item => {
+            item.create_at = dateFilter(item.create_at, 'yyyy-MM-dd hh:mm')
+          })
+          this.tableData = res.result.data;
+          this.total_nums = res.result.total;
           this.$message({
             type: 'success',
-            message: res.msg
+            message: res.message
           })
         } else {
           this.$message({
             type: 'error',
-            message: res.msg
+            message: res.message
           })
         }
         console.log(res)
@@ -99,11 +111,11 @@ export default {
         label: '自测得分'
       },
       {
-        prop: 'industry_score',
+        prop: 'eva_score.industry_score',
         label: '行业得分'
       },
       {
-        prop: 'download_count',
+        prop: 'download_count_f',
         label: '下载次数'
       },
       {

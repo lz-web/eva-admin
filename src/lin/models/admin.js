@@ -38,16 +38,16 @@ export default class Admin {
   static async getAdminUsers({ group_id, count = this.uCount, page = this.uPag,search_obj }) {
     let res
     if (group_id) {
-      res = await get('cms/admin/users', {
+      res = await get('cms/user/list', {
         count,
         page,
         group_id,
         search_obj
       })
     } else {
-      res = await get('cms/admin/users', {
-        count,
-        page,
+      res = await get('cms/user/list', {
+        page_size:count,
+        page_no:page + 1,
         search_obj
       })
     }
@@ -155,15 +155,15 @@ export default class Admin {
     return res
   }
   static async getEvaRecord(params) { // 获取评测记录
-    const res = await get('/cms/medical/evaRecord', params)
+    const res = await get('/cms/eva/record', params)
     return res
   }
   static async getEvaluation(params) { // 获取评测项目
-    const res = await get('/medical/data/evaluation', params)
+    const res = await get('/cms/eva/evaluation', params)
     return res
   }
   static async putEvaRule(params) { // 更新评测项目
-    const res = await put('/cms/medical/evaRule', params)
+    const res = await put('/cms/eva/updateRule', params)
     return res
   }
 }

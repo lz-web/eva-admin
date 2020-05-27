@@ -55,13 +55,13 @@ export default {
             if (res.code == 10000) {
               this.$message({
                 type: 'success',
-                message: res.msg
+                message: res.message
               })
               this.getEvaluation()
             } else {
               this.$message({
                 type: 'error',
-                message: res.msg
+                message: res.message
               })
             }
           })
@@ -78,15 +78,15 @@ export default {
       await Admin.getEvaluation().then((res) => {
         console.log(res)
         if (res.code == 10000) {
-          this.tableData = res.result;
+          this.tableData = res.result.data;
           this.$message({
             type: 'success',
-            message: res.msg
+            message: res.message
           })
         } else {
           this.$message({
             type: 'error',
-            message: res.msg
+            message: res.message
           })
         }
         console.log(res)

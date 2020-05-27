@@ -177,15 +177,15 @@ export default {
         res = await Admin.getAdminUsers({ group_id: this.group_id, count: this.pageCount, page: currentPage, search_obj: this.search_obj }) // eslint-disable-line
         this.loading = false
         // this.tableData = this.shuffleList(res.result.rows)
-        res.result.rows.forEach((item, index) => {
+        res.result.data.forEach((item, index) => {
           item.index = index + 1
-          console.log(item.create_time)
-          let a = dateFilter(item.create_time, 'yyyy-MM-dd hh:mm')
+          console.log(item.create_at)
+          let a = dateFilter(item.create_at, 'yyyy-MM-dd hh:mm')
           // console.log(dateFilter(item.create_time, 'yyyy-MM-dd hh:mm'))
-          item.create_time = dateFilter(item.create_time, 'yyyy-MM-dd hh:mm')
+          item.create_at = dateFilter(item.create_at, 'yyyy-MM-dd hh:mm')
         })
-        this.tableData = res.result.rows
-        this.total_nums = res.result.count
+        this.tableData = res.result.data
+        this.total_nums = res.result.total
       } catch (e) {
         this.loading = false
         console.log(e)
@@ -213,13 +213,13 @@ export default {
         if (res.code == 10000) {
           this.$message({
             type: 'success',
-            message: res.msg
+            message: res.message
           })
           this.getAdminUsers()
         } else {
           this.$message({
             type: 'error',
-            message: res.msg
+            message: res.message
           })
         }
       })
@@ -248,13 +248,13 @@ export default {
         if (res.code == 10000) {
           this.$message({
             type: 'success',
-            message: res.msg
+            message: res.message
           })
           this.getAdminUsers()
         } else {
           this.$message({
             type: 'error',
-            message: res.msg
+            message: res.message
           })
         }
       })
@@ -268,13 +268,13 @@ export default {
         if (res.code == 10000) {
           this.$message({
             type: 'success',
-            message: res.msg
+            message: res.message
           })
           this.getAdminUsers()
         } else {
           this.$message({
             type: 'error',
-            message: res.msg
+            message: res.message
           })
         }
       })
@@ -402,7 +402,7 @@ export default {
   },
   async created() {
     await this.getAdminUsers()
-    this.getAllGroups()
+    // this.getAllGroups()
     this.tableColumn = [
       { prop: 'index', label: '序号', width: '80' },
       { prop: 'user_name', label: '姓名' },
@@ -411,7 +411,7 @@ export default {
       { prop: 'user_industry', label: '所属行业' },
       { prop: 'user_phone', label: '电话' },
       { prop: 'applay_reason', label: '申请原因' },
-      { prop: 'create_time', label: '注册时间' },
+      { prop: 'create_at', label: '注册时间' },
       { prop: 'examine_time', label: '审核时间' },
       { prop: 'user_status', label: '待审核' },
     ] // 设置表头信息

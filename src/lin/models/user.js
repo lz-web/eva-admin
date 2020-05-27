@@ -26,7 +26,7 @@ export default class User {
       username,
       password,
     })
-    saveTokens(tokens.access_token, tokens.refresh_token)
+    saveTokens(tokens.result.access_token, tokens.result.refresh_token)
     return tokens
   }
 
