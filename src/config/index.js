@@ -1,6 +1,6 @@
 const Config = {
-  // baseURL: process.env.VUE_APP_BASE_URL,
-  baseURL: 'http://47.114.34.197:8687',
+  baseURL: process.env.VUE_APP_BASE_URL,
+  // baseURL: 'http://47.114.34.197:8687',
   // baseURL: 'http://localhost:8687',
   stagnateTime: 1 * 60 * 60 * 1000, // 无操作停滞时间  默认1小时
   openAutoJumpOut: true, // 是否开启无操作跳出

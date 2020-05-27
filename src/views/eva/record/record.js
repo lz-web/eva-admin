@@ -1,7 +1,9 @@
 import Utils from '@/lin/utils/util'
 import Admin from '@/lin/models/admin'
 import LinTable from '@/components/base/table/lin-table'
-import { dateFilter } from './../../../assets/js/comm.fnc'
+import {
+  dateFilter
+} from './../../../assets/js/comm.fnc'
 
 export default {
   components: {
@@ -69,8 +71,9 @@ export default {
         page_no: this.currentPage
       }).then((res) => {
         if (res.code == 10000) {
-          res.result.data.forEach(item => {
+          res.result.data.forEach((item, i) => {
             item.create_at = dateFilter(item.create_at, 'yyyy-MM-dd hh:mm')
+            item.id = i + 1;
           })
           this.tableData = res.result.data;
           this.total_nums = res.result.total;
