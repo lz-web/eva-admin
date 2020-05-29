@@ -117,7 +117,7 @@ _axios.interceptors.response.use(
       const { url } = res.config
 
       // refresh_token 异常，直接登出
-      if (code === 10000 || code === 10100) {
+      if (code === 10000 || code === 10100 || code === 10040) {
         setTimeout(() => {
           store.dispatch('loginOut')
           const { origin } = window.location

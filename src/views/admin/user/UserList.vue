@@ -413,7 +413,7 @@ export default {
       { prop: 'applay_reason', label: '申请原因' },
       { prop: 'create_at', label: '注册时间' },
       { prop: 'examine_time', label: '审核时间' },
-      { prop: 'user_status', label: '待审核' },
+      { prop: 'user_status', label: '审核状态' },
     ] // 设置表头信息
     this.operate2 = [
       { name: '审核通过', func: 'handlePass', type: 'primary' },

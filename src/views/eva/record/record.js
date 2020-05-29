@@ -56,7 +56,9 @@ export default {
         type: 'error',
         message: '开发中...'
       })
-      console.log('handleDetail')
+      let url = `${process.env.VUE_APP_front_url}/#/adminEvaResult/${val.row.id}?user_phone=${val.row.user_phone}`
+      console.log(url)
+      window.open(url)
     },
     async handleDownload(val) {
       console.log('handleDownload')
@@ -73,7 +75,7 @@ export default {
         if (res.code == 10000) {
           res.result.data.forEach((item, i) => {
             item.create_at = dateFilter(item.create_at, 'yyyy-MM-dd hh:mm')
-            item.id = i + 1;
+            item.index = i + 1;
           })
           this.tableData = res.result.data;
           this.total_nums = res.result.total;
@@ -98,7 +100,7 @@ export default {
   },
   async created() {
     this.tableColumn = [{
-        prop: 'id',
+        prop: 'index',
         label: '序号'
       },
       {
@@ -131,11 +133,11 @@ export default {
         func: 'handleDetail',
         type: 'primary'
       },
-      {
-        name: '下载',
-        func: 'handleDownload',
-        type: 'danger'
-      },
+      // {
+      //   name: '下载',
+      //   func: 'handleDownload',
+      //   type: 'danger'
+      // },
     ]
     console.log('getEvaRecord')
     this.getEvaRecord()

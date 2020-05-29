@@ -3,7 +3,7 @@
   "version": "0.3.4",
   "private": true,
   "scripts": {
-    "serve": "node script/plugin-get-config.js && vue-cli-service serve",
+    "serve": "node script/plugin-get-config.js && vue-cli-service serve --mode development",
     "build": "node script/plugin-get-config.js && vue-cli-service build",
     "build_pro": "node script/plugin-get-config.js && vue-cli-service build --mode pro",
     "lint": "vue-cli-service lint",
