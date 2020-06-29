@@ -10,6 +10,16 @@ let homeRouter = [
   adminConfig,
   evaRouter,
   wiRouter,
+  {
+    route: '/comment',
+    name: 'commentName',
+    title: '评论管理',
+    type: 'view',
+    icon: 'iconfont icon-rizhiguanli',
+    filePath: 'views/comment/comment.vue',
+    order: 8,
+    inNav: true,
+  },
   // {
   //   title: '权重管理',
   //   type: 'view',

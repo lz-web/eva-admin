@@ -1,0 +1,42 @@
+.container {
+  .search-wrap {
+    .search-item {
+      margin: 0 20px 10px 20px;
+    }
+    .el-input {
+      width: 217px !important;
+    }
+  }
+  padding: 0 30px;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .title {
+      height: 59px;
+      line-height: 59px;
+      color: $parent-title-color;
+      font-size: 16px;
+      font-weight: 500;
+    }
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: flex-end;
+    margin: 20px;
+  }
+}
+
+.info {
+  margin-left: -55px;
+  margin-bottom: -30px;
+}
+
+.password {
+  margin-top: 20px;
+  margin-left: -55px;
+  margin-bottom: -20px;
+}

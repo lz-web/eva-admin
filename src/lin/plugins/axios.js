@@ -4,7 +4,10 @@ import axios from 'axios'
 import Config from '@/config'
 import ErrorCode from '@/config/error-code'
 import store from '@/store'
-import { getToken, saveAccessToken } from '@/lin/utils/token'
+import {
+  getToken,
+  saveAccessToken
+} from '@/lin/utils/token'
 
 const config = {
   baseURL: Config.baseURL || process.env.apiUrl || '',
@@ -29,7 +32,9 @@ _axios.interceptors.request.use(
     // 有 API 请求重新计时
     Vue.prototype.$_lin_jump()
 
-    const reqConfig = { ...originConfig }
+    const reqConfig = {
+      ...originConfig
+    }
 
     // step1: 容错处理
     if (!reqConfig.url) {
@@ -109,80 +114,88 @@ _axios.interceptors.request.use(
 // Add a response interceptor
 _axios.interceptors.response.use(
   async res => {
-    let { code, message } = res.data // eslint-disable-line
-    if (res.status.toString().charAt(0) === '2') {
-      return res.data
-    }
-    return new Promise(async (resolve, reject) => {
-      const { url } = res.config
-
-      // refresh_token 异常，直接登出
-      if (code === 10000 || code === 10100 || code === 10040) {
-        setTimeout(() => {
-          store.dispatch('loginOut')
-          const { origin } = window.location
-          window.location.href = origin
-        }, 1500)
-        return resolve(null)
+      let {
+        code,
+        message
+      } = res.data // eslint-disable-line
+      if (res.status.toString().charAt(0) === '2') {
+        return res.data
       }
-      // 令牌相关，刷新令牌
-      if (code === 10040 || code === 10041 || code === 10050 || code === 10051) {
-        const cache = {}
-        if (cache.url !== url) {
-          cache.url = url
-          const refreshResult = await _axios('cms/user/refresh')
-          saveAccessToken(refreshResult.access_token)
-          // 将上次失败请求重发
-          const result = await _axios(res.config)
-          return resolve(result)
+      return new Promise(async (resolve, reject) => {
+        const {
+          url
+        } = res.config
+
+        // refresh_token 异常，直接登出
+        if (code === 10000 || code === 10100 || code === 10040) {
+          setTimeout(() => {
+            store.dispatch('loginOut')
+            const {
+              origin,
+              pathname
+            } = window.location
+            window.location.href = origin + pathname
+          }, 1000)
+          return resolve(null)
         }
-      }
-      // 第一种情况：默认直接提示后端返回的异常信息；特殊情况：如果本次请求添加了 handleError: true，用户自己try catch，框架不做处理
-      if (res.config.handleError) {
-        return reject(res)
-      }
-      // 第二种情况：采用前端自己的一套异常提示信息；特殊情况：如果本次请求添加了 showBackend: true, 弹出后端返回错误信息。
-      if (Config.useFrontEndErrorMsg && !res.config.showBackend) {
-        // 弹出前端自定义错误信息
-        const errorArr = Object.entries(ErrorCode).filter(v => v[0] === code.toString())
-        // 匹配到前端自定义的错误码
-        if (errorArr.length > 0 && errorArr[0][1] !== '') {
-          message = errorArr[0][1] // eslint-disable-line
-        } else {
-          message = ErrorCode['777']
+        // 令牌相关，刷新令牌
+        if (code === 10040 || code === 10041 || code === 10050 || code === 10051) {
+          const cache = {}
+          if (cache.url !== url) {
+            cache.url = url
+            const refreshResult = await _axios('cms/user/refresh')
+            saveAccessToken(refreshResult.access_token)
+            // 将上次失败请求重发
+            const result = await _axios(res.config)
+            return resolve(result)
+          }
         }
+        // 第一种情况：默认直接提示后端返回的异常信息；特殊情况：如果本次请求添加了 handleError: true，用户自己try catch，框架不做处理
+        if (res.config.handleError) {
+          return reject(res)
+        }
+        // 第二种情况：采用前端自己的一套异常提示信息；特殊情况：如果本次请求添加了 showBackend: true, 弹出后端返回错误信息。
+        if (Config.useFrontEndErrorMsg && !res.config.showBackend) {
+          // 弹出前端自定义错误信息
+          const errorArr = Object.entries(ErrorCode).filter(v => v[0] === code.toString())
+          // 匹配到前端自定义的错误码
+          if (errorArr.length > 0 && errorArr[0][1] !== '') {
+            message = errorArr[0][1] // eslint-disable-line
+          } else {
+            message = ErrorCode['777']
+          }
+        }
+
+        Vue.prototype.$message({
+          message,
+          type: 'error',
+        })
+        reject()
+      })
+    },
+    error => {
+      if (!error.response) {
+        Vue.prototype.$notify({
+          title: 'Network Error',
+          dangerouslyUseHTMLString: true,
+          message: '<strong class="my-notify">请检查 API 是否异常</strong>',
+        })
+        console.log('error', error)
       }
 
-      Vue.prototype.$message({
-        message,
-        type: 'error',
-      })
-      reject()
-    })
-  },
-  error => {
-    if (!error.response) {
-      Vue.prototype.$notify({
-        title: 'Network Error',
-        dangerouslyUseHTMLString: true,
-        message: '<strong class="my-notify">请检查 API 是否异常</strong>',
-      })
-      console.log('error', error)
-    }
-
-    // 判断请求超时
-    if (error.code === 'ECONNABORTED' && error.message.indexOf('timeout') !== -1) {
-      Vue.prototype.$message({
-        type: 'warning',
-        message: '请求超时',
-      })
-    }
-    return Promise.reject(error)
-  },
+      // 判断请求超时
+      if (error.code === 'ECONNABORTED' && error.message.indexOf('timeout') !== -1) {
+        Vue.prototype.$message({
+          type: 'warning',
+          message: '请求超时',
+        })
+      }
+      return Promise.reject(error)
+    },
 )
 
 // eslint-disable-next-line
-Plugin.install = function(Vue, options) {
+Plugin.install = function (Vue, options) {
   // eslint-disable-next-line
   Vue.axios = _axios
   window.axios = _axios

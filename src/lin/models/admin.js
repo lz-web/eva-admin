@@ -1,5 +1,10 @@
 /* eslint-disable class-methods-use-this */
-import { post, get, put, _delete } from '@/lin/plugins/axios'
+import {
+  post,
+  get,
+  put,
+  _delete
+} from '@/lin/plugins/axios'
 
 export default class Admin {
   constructor(uPage = 0, uCount = 10, gPage = 0, gCount = 5) {
@@ -35,7 +40,12 @@ export default class Admin {
     return get('cms/admin/permission')
   }
 
-  static async getAdminUsers({ group_id, count = this.uCount, page = this.uPag,search_obj }) {
+  static async getAdminUsers({
+    group_id,
+    count = this.uCount,
+    page = this.uPag,
+    search_obj
+  }) {
     let res
     if (group_id) {
       res = await get('cms/user/list', {
@@ -46,8 +56,8 @@ export default class Admin {
       })
     } else {
       res = await get('cms/user/list', {
-        page_size:count,
-        page_no:page + 1,
+        page_size: count,
+        page_no: page + 1,
         search_obj
       })
     }
@@ -64,7 +74,10 @@ export default class Admin {
     return this.getAdminUsers({})
   }
 
-  async getGroupsWithPermissions({ count = this.uCount, page = this.uPag }) {
+  async getGroupsWithPermissions({
+    count = this.uCount,
+    page = this.uPag
+  }) {
     const res = await get('cms/admin/groups', {
       count,
       page,
@@ -164,6 +177,18 @@ export default class Admin {
   }
   static async putEvaRule(params) { // 更新评测项目
     const res = await put('/cms/eva/updateRule', params)
+    return res
+  }
+  static async getCommentList(params) { // 获取评论列表
+    const res = await get('/cms/medical/commentList', params)
+    return res
+  }
+  static async putCommentStatus(params) { // 更新评论状态
+    const res = await put('/cms/medical/commentStatus', params)
+    return res
+  }
+  static async deleteComment(id) { // 更新评论状态
+    const res = await _delete(`cms/medical/deleteComment/${id}`)
     return res
   }
 }

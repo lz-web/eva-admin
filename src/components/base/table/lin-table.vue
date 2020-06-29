@@ -43,8 +43,7 @@
             size="mini"
             v-permission="{ permission: item.permission ? item.permission : '', type: 'disabled' }"
             @click.native.prevent.stop="buttonMethods(item.func, scope.$index, scope.row)"
-            >{{ item.name }}</el-button
-          >
+          >{{ item.name }}</el-button>
         </template>
       </el-table-column>
       <el-table-column v-if="operate2.length > 0" label="操作" fixed="right" width="190">
@@ -57,8 +56,20 @@
             :key="index"
             size="mini"
             @click.native.prevent.stop="buttonMethods(item.func, scope.$index, scope.row)"
-            >{{ item.name }}</el-button
-          >
+          >{{ item.name }}</el-button>
+        </template>
+      </el-table-column>
+      <el-table-column v-if="operate3.length > 0" label="操作" fixed="right" width="250">
+        <template slot-scope="scope">
+          <el-button
+            v-for="(item, index) in operate3"
+            v-show="(scope.row.comment_status.indexOf('已') ==-1 && item.name.indexOf('审核') != -1) || item.name == '删除'"
+            :type="item.type"
+            plain
+            :key="index"
+            size="mini"
+            @click.native.prevent.stop="buttonMethods(item.func, scope.$index, scope.row)"
+          >{{ item.name }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -96,6 +107,11 @@ export default {
       default: () => [],
     },
     operate2: {
+      // 自定义按键及绑定方法
+      type: Array,
+      default: () => [],
+    },
+    operate3: {
       // 自定义按键及绑定方法
       type: Array,
       default: () => [],
@@ -174,7 +190,7 @@ export default {
       rowClassName: '', // 行样式
     }
   },
-  created() {},
+  created() { },
   beforeMount() {
     // 先放在session里，因为每次切换页码table都会重新渲染，之前选中都数据就丢失了  sessionstorage在create里面打包会提示undefined
     sessionStorage.setItem('selectedTableData', JSON.stringify([]))
